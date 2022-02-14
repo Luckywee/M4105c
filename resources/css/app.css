@@ -1,0 +1,53 @@
+*{
+    margin: 0;
+}
+form div{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+    position: relative;
+}
+#logmein{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+input{
+    left: 5px;
+    position: relative;
+}
+.text-danger{
+    color: red;
+    left: 10px;
+    position: relative;
+}
+#password, #email{
+    border-bottom: solid 1px !important;
+    outline: none;
+    border: none;
+    max-height: 25px;
+    transition: background-color 0.5s ease;
+}
+#password:focus , #email:focus{
+    background-color: rgba(0,0,0,0.1);
+}
+#logmein{
+    padding: 5px 40px;
+    display: block;
+    border: none;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+}
+#logmein:hover{
+    transform: scale(0.9);
+}
+h1{
+    text-align: center;
+    margin: 20px auto;
+}
+a{
+    text-decoration: none;
+}
