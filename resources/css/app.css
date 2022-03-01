@@ -5,6 +5,7 @@ form div{
     display: flex;
     justify-content: center;
     margin-bottom: 25px;
+    width: 100%;
     position: relative;
 }
 #logmein{
@@ -44,10 +45,64 @@ input{
 #logmein:hover{
     transform: scale(0.9);
 }
-h1{
+h1, h2{
     text-align: center;
     margin: 20px auto;
 }
+textarea{
+    resize: none;
+    height: 250px;
+    margin: 20px auto;
+    display: block;
+    width: 60%;
+}
 a{
     text-decoration: none;
+}
+.sectionmodif{
+    border: solid 2px;
+    width: 35%;
+    display: block;
+    margin: auto;
+    float: left;
+    left: 50px;
+    position: relative;
+    height: auto;
+}
+#retour, #maj, #inserer, #affecter{
+    bottom: 0;
+    position: relative;
+    text-align: center;
+    display: block;
+    border: none;
+    margin: 60px auto;
+    cursor: pointer;
+}
+#maj{
+    left: 0;
+    transform: scale(1.2);
+}
+.coolbutton{
+    padding: 10px;
+    background-color: black;
+    color: white;
+    width: 100px;
+}
+#typeprobleme, #etatticket{
+    text-align: center;
+    display: block;
+    margin: auto;
+}
+.modifform{
+    display: grid;
+}
+.leftzero{
+    left: 0;
+}
+.majpage{
+    text-align: center;
+    display: block;
+    margin: 20% auto;
+    font-size: 1.5em;
+    position: relative;
 }

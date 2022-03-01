@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use App\Models\Demandeur;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class LoginController extends Controller
@@ -28,7 +29,6 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
             return redirect()->intended('ticketmain'); //pour forcer à quitter la page de login je crois
         }
         
@@ -43,5 +43,13 @@ class LoginController extends Controller
             'email.required' => 'Un email est requis',
             'password.required' => 'Un mot de passe est requis',
         ];
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

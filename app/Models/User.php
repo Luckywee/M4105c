@@ -18,6 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'firstname',
         'lastname',
         'email',
@@ -42,4 +43,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function userelation(){
+        return $this->belongsTo(DroitUsers::class, 'user_id');
+    }
 }

@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TypeProbleme extends Model
 {
     use HasFactory;
+    protected $fillable = [
+       'id','libelle'
+    ];
 }

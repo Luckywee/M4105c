@@ -16,16 +16,15 @@ class CreateTicketsTable extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->integer('type_probleme_id');
-            $table->integer('demandeur_id');
-            $table->integer('operateur_id')->nullable();
-            $table->integer('responsable_id')->nullable();
+            $table->integer('droituser_id');
             $table->foreign('type_probleme_id')->references('id')->on('type_problemes');
             $table->date('datecreation');
             $table->string("description");
-            $table->foreign('demandeur_id')->references('id')->on('demandeurs');
-            $table->foreign('operateur_id')->references('id')->on('operateurs'); 
-            $table->foreign('responsable_id')->references('id')->on('responsables');
-            $table->string('piecejointe')->nullable();          
+            $table->foreign('droituser_id')->references('id')->on('droit_users');
+            $table->integer('etat_id');
+            $table->foreign('etat_id')->references('id')->on('etat_tickets');            
+            $table->string('piecejointe')->nullable();
+            $table->string('commentaire')->nullable();          
             $table->timestamps();
         });
     }

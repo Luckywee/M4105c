@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header/>
+    <Header :title="title"/>
   <div>
     <TableOpe :tickets="tickets"/> <!-- pour passer le une donnée à un component-->
   </div>
@@ -13,9 +13,7 @@ import TableOpe from "../Components/TableOperateur.vue";
 export default {
     name: "Ticketmain",
         props:{
-        title: {
-            type: String
-        },
+
         tickets: {
             type: Array
         },
@@ -26,13 +24,17 @@ export default {
             type: String
         }
     },
+    data(){
+        return {
+            title: "Liste des tickets"
+        }
+    },
     components: {
         Header, TableOpe
     },
     methods: {
     },
     mounted() {
-
     },
     }
 </script>

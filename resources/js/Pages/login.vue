@@ -34,10 +34,10 @@ export default {
   },
   name: 'headerlogin', //custom fonction JS
   mounted() {
-          let helpdeskimg = document.getElementById("helpdeskimg");
-          let logmein = document.getElementById("logmein");
-          helpdeskimg.setAttribute("style","margin: auto; width: 200px; display: block;");
-          //en gors ça disable le button, comme ça la personne ne spam pas si un input est vide
+    let helpdeskimg = document.getElementById("helpdeskimg");
+    let logmein = document.getElementById("logmein");
+    helpdeskimg.setAttribute("style","margin: auto; width: 200px; display: block;");
+          //en gros ça disable le button, comme ça la personne ne spam pas si un input est vide
           let loginbuttondisabled = (state) => {
             if(state){
               logmein.disabled=true;
@@ -47,7 +47,6 @@ export default {
               logmein.style.backgroundColor = "black";
             }
           }
-
           var urmom = () => {
               if(email.value == "" || password.value == "") {
                 loginbuttondisabled(true);
