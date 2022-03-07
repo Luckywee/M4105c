@@ -1,7 +1,7 @@
 <template>
   <div>
-      <Header :title="title"/>
-  <div v-for="yourmom in listeticketmodif" :key="yourmom.id">
+    <Header :title="title" :moi="moi"/>
+  <div id="modifplane" v-for="yourmom in listeticketmodif" :key="yourmom.id">
       <h1>Traiter le ticket de {{ yourmom.firstname }} {{ yourmom.lastname }}</h1><br>
       <h2>Ticket effectué le {{yourmom.datecreation}}</h2>
       <div>
@@ -33,11 +33,15 @@
                 </section>
                 </div>
                 <br>
-              <figure>
+              <figure v-if="roz === true || rop === true"> <!-- ou sinon v-if="roz || rop" -->
                     <input type="submit" id="maj" class="coolbutton" value="Mettre à jour"/>
                     <Link id="affecter" class="coolbutton" :href="$route('affecterticket', {id : yourmom.id})">Affecter ce ticket</Link>
                     <a id="retour" class="coolbutton" href="/ticketmain">Retour mdr</a>
               </figure>
+                <figure v-else>
+                    <a id="retour" class="coolbutton" href="/ticketmain">Retour mdr</a>
+              </figure>
+
           </form>
       </div>
   </div>
@@ -51,7 +55,7 @@ let body = document.querySelector('body');
 export default {
     name: "Ticketmodification",
         props:{
-        tickets: {
+        tickets: { //all tickets, j'ai mis ça pour la liste des problèmes
             type: Array
         },
         ticket: {
@@ -62,6 +66,15 @@ export default {
         },
         listeetat: {
             type: Array
+        },
+        roleop: {
+            type: Boolean
+        },
+        roleresp: {
+            type: Boolean
+        },
+        moi : {
+            type: Object
         }
     },
     data() {
@@ -71,7 +84,10 @@ export default {
                 commentaire: this.ticket.commentaire,
                 etat_id: this.ticket.etat_id
             }),
-            title: "Modification du ticket"
+            title: "Modification du ticket",
+            piej: this.ticket.piecejointe,
+            roz: this.roleop,
+            rop: this.roleresp
         }
     },
     components: {
@@ -79,19 +95,26 @@ export default {
     },
     methods: {
         imagezoom(e){
-            if(imageclick == 0){
+            let modifplane = document.getElementById("modifplane");
+            if(imageclick == 0 && this.piej != null){
                 imageclick++;
-                console.log('eee image clicked');
+                //console.log('eee image clicked');
                 let ay = document.createElement('div');
+                let imag = document.createElement('img');
                 let exit = document.createElement('div');
-                ay.setAttribute('style','width: 80%; height: 65%; background-color: #00010080; position: fixed; display: block; margin: auto; z-index: 10; top:0; right:0; left:0; bottom: 0;');
-                exit.setAttribute('style','flot:right; right: 10px; top: 15px; position: absolute; width: 50px; height: 50px; text-align: center; font-size: 2em; cursor: pointer;');
-                //ay.innerHTML = "<img width='100' height='100' :src='/img/" + this.tickets.piecejointe + "/>";
+                ay.setAttribute('style','width: 80%; height: 600px; background-color: #00010080; position: fixed; display: block; margin: auto; z-index: 10; top:0; right:0; left:0; bottom: 0; text-align: center;');
+                exit.setAttribute('style','flot:right; right: 10px; top: 15px; position: absolute; width: 50px; height: 50px; text-align: center; font-size: 2em; cursor: pointer; border-radius: 100%; background-color: white; padding-top: 10px;');
+                imag.setAttribute('style','position: relative; height: 80%; margin: auto; display: block; width: 60%;');
+                ay.innerText = "Image du ticket : " + this.piej; 
+                imag.src = "/img/upload/" + this.piej;
                 exit.innerText = "X";
                 body.appendChild(ay);
+                ay.appendChild(imag);
                 ay.appendChild(exit);
+                modifplane.style.filter = "blur(8px)";
                 exit.addEventListener("click",() => {
                     imageclick = 0;
+                    modifplane.style.filter = "blur(0)";
                     ay.remove();
                 })
             }

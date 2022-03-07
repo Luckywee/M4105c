@@ -17,4 +17,8 @@ class Operateur extends User
     protected $fillable = [
         'skills'
     ];
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

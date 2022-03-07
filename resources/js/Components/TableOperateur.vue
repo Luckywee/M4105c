@@ -1,6 +1,7 @@
 <template>
   <section class="ticketzone">
-    <p>Nombre de ticket total : <b id="countticket"></b></p>
+    <p v-if="dem">Nombre de vos ticket(s) total(s) : <b id="countticket"></b></p>
+    <p v-else>Nombre de ticket(s) total(s) : <b id="countticket"></b></p>
     <table>
       <tr>
         <th>ID</th>
@@ -23,6 +24,11 @@
         </td>
       </tr>
     </table>
+    <div v-if="rep || dem">
+      <Link id="sendticket" class="coolbutton" :href="$route('displaymakenewticket')">Créer un nouveau ticket</Link>
+    </div>
+    <div v-else>
+    </div>
   </section>
 </template>
 
@@ -33,6 +39,18 @@ export default {
     tickets: { 
       type: Array
     },
+    roledem: {
+      type: Boolean
+    },
+    roleresp: {
+      type: Boolean
+    }
+  },
+  data(){
+    return {
+            dem: this.roledem,
+            rep: this.roleresp
+    }
   },
   computed: {
     formatedTickets() {

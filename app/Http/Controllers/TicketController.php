@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\isResp;
 use App\Models\Ticket;
 use App\Models\Demandeur;
 use App\Models\DroitUsers;
@@ -17,17 +18,36 @@ class TicketController extends Controller
 {
     public function menu()
     {
-        $username = Auth::user()->firstname;
-        $lastname = Auth::user()->lastname;
+        $idUser = Auth::user()->id;
+        $meinfo = Auth::user();
+        $resp = User::find(Auth::user()->id)->isResp();
+        $op = User::find(Auth::user()->id)->isOp();
+        //dd($meinfo);
+        if($resp){ //si utilisateur est responsable
         $tickets = DB::table('tickets')->join('type_problemes', 'type_probleme_id', '=', 'type_problemes.id')
             ->join('droit_users', 'droituser_id', '=', 'droit_users.id')
             ->join('users', 'user_id', '=', 'users.id')->select('tickets.*', 'type_problemes.libelle', 'users.firstname', 'users.lastname')->OrderBy('datecreation', 'desc')->OrderBy('id', 'desc')->get();
+        }
+        else if ($op){
+            $tickets = DB::table('tickets')->join('type_problemes', 'type_probleme_id', '=', 'type_problemes.id')
+                ->join('droit_users', 'droituser_id', '=', 'droit_users.id')
+                ->join('users', 'user_id', '=', 'users.id')->select('tickets.*', 'type_problemes.libelle', 'users.firstname', 'users.lastname','users.id AS usrid')->where('tickets.operateur_id',$idUser)->OrderBy('tickets.datecreation', 'desc')->OrderBy('tickets.id', 'desc',)->get();
+        }
+        else{ 
+            $tickets = DB::table('tickets')->join('type_problemes', 'type_probleme_id', '=', 'type_problemes.id')
+            ->join('droit_users', 'droituser_id', '=', 'droit_users.id')
+            ->join('users', 'user_id', '=', 'users.id')->select('tickets.*', 'type_problemes.libelle', 'users.firstname', 'users.lastname','users.id AS userid')->where('tickets.droituser_id',$idUser)->OrderBy('tickets.datecreation', 'desc')->OrderBy('tickets.id', 'desc',)->get(); //si deux table.id faire un AS qqch comme ça la vueJS ne confond pas des IDs.
+        }
         //$tickets = Ticket::OrderBy('datecreation', 'desc')->get();
         //var_dump($tickets);  
-        return Inertia::render("ticketmain", ["tickets" => $tickets], ["username" => $username], ["lastname" => $lastname]); //dire à Inertia VueJS que tickets et égale au tickets de laravel
+        return Inertia::render("ticketmain", ["tickets" => $tickets, "moi" => $meinfo, "resp" => $resp, "dem" => User::find(Auth::user()->id)->isDemandeur()]); //dire à Inertia VueJS que tickets et égale au tickets de laravel
     }
     
-    public function oneticket(int $id){
+    public function oneticket(int $id){ //le ID pris en compte dans la route par paramètre
+        $meinfo = Auth::user();
+        $roleop = User::find(Auth::user()->id)->isOp();
+        $roleresp = User::find(Auth::user()->id)->isResp();
+
         $tickets = DB::table('tickets')->join('type_problemes', 'type_probleme_id', '=', 'type_problemes.id')->join('etat_tickets', 'etat_id', '=', 'etat_tickets.id')
         ->join('droit_users', 'droituser_id', '=', 'droit_users.id')
         ->join('users', 'user_id', '=', 'users.id')->select('tickets.*', 'type_problemes.libelle', 'users.firstname', 'users.lastname', 'etat_tickets.libelle_etat')->where('tickets.id', $id)->get(); //ON PEUT AVEC DES Ticket:: with->
@@ -35,40 +55,44 @@ class TicketController extends Controller
         $listeprobleme = DB::table('type_problemes')->select('type_problemes.libelle')->get();
         $listeetat = DB::table('etat_tickets')->select('etat_tickets.id', 'etat_tickets.libelle_etat')->get(); //dans le get pour pouvoir afficher la liste des etats et ensuite les edits après le post (il ne faut rien oublié dans les parametre)
         //var_dump($listeproblemeetat);
-    return Inertia::render("ticketmodification",["tickets" => $tickets /*Ticket::find($id)*/,"listeprobleme" => $listeprobleme, "listeetat"=> $listeetat, "ticket" => Ticket::findOrFail($id)]); //ticket = pour override les valeurs des datas dans ticketmodification.vue
+    return Inertia::render("ticketmodification",["tickets" => $tickets /*Ticket::find($id)*/,"listeprobleme" => $listeprobleme, "listeetat"=> $listeetat, "ticket" => Ticket::findOrFail($id), "roleop" => $roleop, "roleresp" => $roleresp, "moi" => $meinfo]); //ticket = pour override les valeurs des datas dans ticketmodification.vue
     }
 
     //MODIF D'UN TICKET
     public function updateticket(Request $request, int $id){
+        $meinfo = Auth::user();
         EtatTicket::find($request->etat_id);
 
         $validor = $request->validate([ //on check s'il y a des valeurs qui a été modifié ou sinon si pas de valeurs alors on ne peut pas submit (aussi, c'est de la recup des données du form du template vueJS)
-            "description" => ['required'],"commentaire" => [], "etat_id" => [], "libelle_etat" => []
+            "description" => ['required'],"commentaire" => [], "etat_id" => [], "libelle_etat" => [] //faut pas que ça soit vide
         ]);
             Ticket::FindOrFail($id)->update($validor); //on update via la variable validor qui est le request validate
-            return Inertia::Render("ticketupdate", ["tickets" => Ticket::find($id)]);
+            return Inertia::Render("ticketupdate", ["tickets" => Ticket::find($id), "moi" => $meinfo]);
 
     }
     public function displayupdate(int $id){
+        $meinfo = Auth::user();
         $see = DB::table('tickets')->join('etat_tickets', 'etat_id', '=', 'etat_tickets.id')->select('tickets.*', 'etat_tickets.libelle_etat')->where('tickets.id', $id)->get();
         //$listeetat = EtatTicket::all();
-        return Inertia::render("ticketupdate", ["tickets" => Ticket::find($id), "ticketarray" => $see]);
+        return Inertia::render("ticketupdate", ["tickets" => Ticket::find($id), "ticketarray" => $see, "moi" => $meinfo]);
     }
 
     public function displaymakenewticket(){
+        $meinfo = Auth::user();
         $tickets = DB::table('tickets')->join('type_problemes', 'type_probleme_id', '=', 'type_problemes.id')->join('etat_tickets', 'etat_id', '=', 'etat_tickets.id')
         ->join('droit_users', 'droituser_id', '=', 'droit_users.id')
         ->join('users', 'user_id', '=', 'users.id')->select('tickets.*', 'type_problemes.libelle', 'users.firstname', 'users.lastname', 'etat_tickets.libelle_etat')->get();
         $userid = Auth::user()->id;
         $yo = DroitUsers::find($userid);
         //$user = Auth::user()->userelation()->$testi;
-        var_dump($yo->user_id);
+        //var_dump($yo->user_id);
         $listeprobleme = TypeProbleme::all(); //DB::table('type_problemes')->select('type_problemes.id', 'type_problemes.libelle')->get();
-        return Inertia::render("ticketform", ["listeprobleme" => $listeprobleme, "tickets" => $tickets]);
+        return Inertia::render("ticketform", ["listeprobleme" => $listeprobleme, "tickets" => $tickets, "moi" => $meinfo]);
     }
 
     public function displayinsert(){
-        return Inertia::Render("ticketenvoye", ["tickets" => Ticket::all()]);
+        $meinfo = Auth::user();
+        return Inertia::Render("ticketenvoye", ["tickets" => Ticket::all(), "moi" => $meinfo]);
     }
 
     //INSERER UN TICKET
@@ -110,16 +134,6 @@ class TicketController extends Controller
        // $request->piecejointe->move('public/img/',$name);
         //$ticket->typeprobleme()->save($typeProbleme);
         return Inertia::Render("ticketenvoye", ["tickets" => Ticket::all()]);
-    }
-
-    public function displayaffecterticket(int $id){
-        $operateurs = DB::table('droit_users')->leftjoin('type_problemes','competence','=','type_problemes.id')->join('users', 'user_id', '=', 'users.id')->select('droit_users.id','droit_users.competence','type_problemes.libelle','users.*')->where('type_id', 2)->get();
-        //var_dump($operateurs);
-        return Inertia::Render("affecterticket", ["operateurs" => $operateurs, "ticket" => Ticket::find($id)]);
-    }
-
-    public function seeOperateurUniquement(){
-
     }
 
 }

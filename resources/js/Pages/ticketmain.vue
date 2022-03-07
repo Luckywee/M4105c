@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Header :title="title"/>
+    <Header :title="title" :moi="moi"/>
   <div>
-    <TableOpe :tickets="tickets"/> <!-- pour passer le une donnée à un component-->
+    <TableOpe :tickets="tickets" :roledem="dem" :roleresp="resp"/> <!-- pour passer une donnée à un component-->
   </div>
   </div>
 </template> 
@@ -17,11 +17,14 @@ export default {
         tickets: {
             type: Array
         },
-        username: {
-            type: String
+        moi : {
+            type: Object
         },
-        lastname: {
-            type: String
+        dem: {
+            type: Boolean
+        },
+        resp: {
+            type: Boolean
         }
     },
     data(){

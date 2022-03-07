@@ -40,10 +40,26 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
-    protected $casts = [
+    protected $casts = [ //des casts qu'on ne peut pas modif je crois
         'email_verified_at' => 'datetime',
     ];
+    public function droituser()
+    {
+        return $this->hasOne(DroitUsers::class);
+    }
     public function userelation(){
         return $this->belongsTo(DroitUsers::class, 'user_id');
+    }
+
+    public function isResp(){
+        return $this->droituser->type_id == 3;
+    }
+
+    public function isOp(){
+        return $this->droituser->type_id == 2;
+    }
+
+    public function isDemandeur(){
+        return $this->droituser->type_id == 1;
     }
 }

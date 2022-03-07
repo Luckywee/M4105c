@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header :title="title"/>
+        <Header :title="title" :moi="moi"/>
         <div>
             <TicketDemandeur :listeprobleme="listeprobleme" :tickets="tickets"/>
         </div>
@@ -18,6 +18,9 @@ export default {
             },
         tickets: {
             type: Array
+        },
+        moi : {
+            type: Object
         }
         },
         data() {

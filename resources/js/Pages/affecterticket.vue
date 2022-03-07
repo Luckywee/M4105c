@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header :title="title"/> <!--Props doit etre dans le header et non sur cette page ou sinon erreur -->
+        <Header :title="title" :operateurs="operateurs" :moi="moi"/> <!--Props doit etre dans le header et non sur cette page ou sinon erreur -->
         <div class="listeoperateur">
             <ListeOpe :operateurs="operateurs" :ticket="ticket"/>
         </div>
@@ -17,6 +17,9 @@ export default {
             type: Array
             },
         ticket: {
+            type: Object
+        },
+        moi: { 
             type: Object
         }
         },

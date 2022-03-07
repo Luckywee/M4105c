@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form enctype="multipart/form-data" @submit.prevent="form.post($route('insererticket'))" @submit="submit">
+        <form enctype="multipart/form-data" @submit.prevent="form.post($route('insererticket'))">
             <section>
                 <p>La date à laquel votre ticket va être envoyé <b id="timenow"></b></p>
                 <label for="typeasaisir">Quel est votre type de problème ?</label>
@@ -36,7 +36,7 @@ export default {
         return {
             title: "Formulaire de ticket",
              form: this.$inertia.form({
-                 description: "",
+                 description: "", //quand la page s'affiche en post, on aura des nouvelle données. Genre description.setText("") comme en Java pour faire un champs vide
                  type_probleme_id: this.tickets.type_probleme_id,
                  '_method': 'POST',
                  piecejointe: ""
@@ -51,9 +51,6 @@ export default {
         let uploader = document.querySelector('#uploader');
         //console.log(event.target.files[0]);
         return uploader.value = event.target.files[0].name;
-        },*/
-        /*submit() {
-            this.form.post('/img/');
         },*/
         submit() {
             /*if (this.$refs.photo) {

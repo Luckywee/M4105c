@@ -1,8 +1,8 @@
 <template>
     <div>
-        <Header :title="title"/> <!--Props doit etre dans le header et non sur cette page ou sinon erreur -->
+        <Header :title="title" :moi="moi"/> <!--Props doit etre dans le header et non sur cette page ou sinon erreur -->
         <div class="majpage">
-            <p >Le ticket numéro {{ this.tickets.id }} a été mise à jour !</p>
+            <p >Le ticket numéro {{ id }} a été mise à jour !</p>
             <p>Vous serez redirigé vers la page des tickets dans : <b id="showtimer">3</b></p>
         </div>
     </div>
@@ -15,7 +15,10 @@ export default {
         props:{
         tickets: {
             type: Object
-            }
+            },
+        moi : {
+            type: Object
+        }
         },
         data() {
         return {

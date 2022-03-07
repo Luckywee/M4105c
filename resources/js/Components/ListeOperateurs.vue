@@ -1,5 +1,6 @@
 <template>
   <section class="ticketzone">
+    <form  @submit.prevent="form.post($route('affectationnow', { id }))">
       <p>TICKET NO# {{ id }}</p>
     <table>
       <tr>
@@ -11,10 +12,11 @@
         <td>{{ row.id }}</td>
         <td>{{ row.firstname }} {{ row.lastname }}</td>
         <td>{{ row.libelle }}</td>
-        <td>
-        </td>
+        <input @change="test" id="checkop" type="radio" name="checkop" v-model="form.operateur_id" v-bind:value="row.id"/>
       </tr>
     </table>
+    <input type="submit" id="affecterticket" class="coolbutton" value="Affecter le ticket"/>
+    </form>
     <Link id="retour" class="coolbutton" :href="$route('oneticket', { id })">Retour</Link>
   </section>
 </template>
@@ -24,7 +26,11 @@ export default {
   name: "ListeOpe",
 data() {
     return {
-        id: this.ticket.id
+       form: this.$inertia.form({
+          operateur_id : this.operateurs.id,
+          checkd: null
+        }),
+        id: this.ticket.id,
         }
   },
   props: {
@@ -37,7 +43,12 @@ data() {
   },
   computed: {
   },
-  methods: {},
+  methods: {
+    test(e){
+      let checko = document.getElementById('checkop');
+      console.log(this.form.operateur_id);
+    }
+  },
   mounted() { 
   },
 };
@@ -54,5 +65,15 @@ td {
 }
 th {
   width: 250px;
+}
+#checkop {
+  left: 0;
+}
+#affecterticket{
+  width: 120px;
+  left: 0;
+  margin: auto;
+  display: block;
+  margin-top: 100px;
 }
 </style>

@@ -5,7 +5,7 @@
             <h1 id="title">{{ title }}</h1>
             <a href="/logout" id="logout" value="logout">Déconnexion</a>
         </div>
-        <p id="bienvenu">Bienvenue : </p>
+        <p id="bienvenu">Bienvenue : {{firstname}} {{lastname}} </p>
     </header>
 </template>
 
@@ -15,6 +15,15 @@ export default {
     props: {
         title: {
             type: String
+        },
+        moi : {
+            type: Object
+        }
+    },
+     data() {
+        return {
+            firstname: this.moi.firstname,
+            lastname: this.moi.lastname
         }
     },
     methods: {
@@ -23,7 +32,7 @@ export default {
             }
     },
     mounted(){
-            let bienvenu = document.getElementById("bienvenu");
+            /*let bienvenu = document.getElementById("bienvenu");
             let username = document.querySelector("meta[name='user_firstname']").getAttribute('content'); //le app.blade.php sert à passer du php laravel et avec vueJS on va le chercher avec un querySelector.
             let lastname = document.querySelector("meta[name='user_lastname']").getAttribute('content');
             let imggohome = document.getElementById('helpdeskimg');
@@ -34,7 +43,7 @@ export default {
                     bienvenu.innerText += " " + username + " " + lastname;
                 }
             }
-            displayuserinfo();
+            displayuserinfo();*/ //old code en JS natif pour afficher le nom et prénom dans le header
     }
 }
 </script>

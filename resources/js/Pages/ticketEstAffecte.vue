@@ -2,7 +2,7 @@
     <div>
         <Header :title="title" :moi="moi"/>
         <div class="majpage">
-            <p >Le nouveau ticket numéro {{ this.tickets.id }} a été enregistré</p>
+            <p >Le ticket numéro {{ this.ticket.id }} a été affecté</p>
             <p>Vous serez redirigé vers la page des tickets dans : <b id="showtimer">3</b></p>
         </div>
     </div>
@@ -11,9 +11,9 @@
 <script>
 import Header from "../Components/Header.vue";
 export default {
-    name: "ticketenvoye",
+    name: "ticketEstAffecte",
         props:{
-        tickets: {
+        ticket: {
             type: Array
             },
         moi : {
@@ -22,8 +22,8 @@ export default {
         },
         data() {
         return {
-            title: "Ticket inséré !",
-            id: this.tickets.id
+            title: "Ticket affecté !",
+            id: this.ticket.id
             }
         },
     components: {
