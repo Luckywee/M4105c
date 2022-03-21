@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 
 class AffecterTicketController extends Controller
 {
-    public function displayaffecterticket(int $id){
+    public function displayaffecterticket(int $id){ //display la liste des operateurs
         $meinfo = Auth::user();
         $operateurs = DB::table('droit_users')->leftjoin('type_problemes','competence','=','type_problemes.id')->join('users', 'user_id', '=', 'users.id')->select('droit_users.id','droit_users.competence','type_problemes.libelle','users.*')->where('type_id', 2)->get();
         //var_dump($operateurs);

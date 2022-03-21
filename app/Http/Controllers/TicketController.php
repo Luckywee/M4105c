@@ -24,14 +24,16 @@ class TicketController extends Controller
         $op = User::find(Auth::user()->id)->isOp();
         //dd($meinfo);
         if($resp){ //si utilisateur est responsable
-        $tickets = DB::table('tickets')->join('type_problemes', 'type_probleme_id', '=', 'type_problemes.id')
+        $tickets = DB::table('tickets')->join('type_problemes', 'type_probleme_id', '=', 'type_problemes.id')->join('etat_tickets', 'etat_id' ,'=', 'etat_tickets.id')
             ->join('droit_users', 'droituser_id', '=', 'droit_users.id')
-            ->join('users', 'user_id', '=', 'users.id')->select('tickets.*', 'type_problemes.libelle', 'users.firstname', 'users.lastname')->OrderBy('datecreation', 'desc')->OrderBy('id', 'desc')->get();
+            ->join('users', 'user_id', '=', 'users.id')->select('tickets.*', 'type_problemes.libelle', 'users.firstname', 'users.lastname', 'etat_tickets.libelle_etat')->OrderBy('datecreation', 'desc')->OrderBy('id', 'desc')->get();
         }
         else if ($op){
-            $tickets = DB::table('tickets')->join('type_problemes', 'type_probleme_id', '=', 'type_problemes.id')
+            $tickets = DB::table('tickets')->join('type_problemes', 'type_probleme_id', '=', 'type_problemes.id')->join('etat_tickets', 'etat_id' ,'=', 'etat_tickets.id')
                 ->join('droit_users', 'droituser_id', '=', 'droit_users.id')
-                ->join('users', 'user_id', '=', 'users.id')->select('tickets.*', 'type_problemes.libelle', 'users.firstname', 'users.lastname','users.id AS usrid')->where('tickets.operateur_id',$idUser)->OrderBy('tickets.datecreation', 'desc')->OrderBy('tickets.id', 'desc',)->get();
+                ->join('users', 'user_id', '=', 'users.id')->select('tickets.*', 'type_problemes.libelle', 'users.firstname', 'users.lastname','users.id AS usrid', 'etat_tickets.id AS etatid')->where('tickets.operateur_id',$idUser)->where('tickets.etat_id',1)->OrderBy('tickets.datecreation', 'desc')->OrderBy('tickets.id', 'desc',)->get();
+
+                //dd(EtatTicket::find(1)->isNotResolu());
         }
         else{ 
             $tickets = DB::table('tickets')->join('type_problemes', 'type_probleme_id', '=', 'type_problemes.id')
@@ -40,7 +42,7 @@ class TicketController extends Controller
         }
         //$tickets = Ticket::OrderBy('datecreation', 'desc')->get();
         //var_dump($tickets);  
-        return Inertia::render("ticketmain", ["tickets" => $tickets, "moi" => $meinfo, "resp" => $resp, "dem" => User::find(Auth::user()->id)->isDemandeur()]); //dire à Inertia VueJS que tickets et égale au tickets de laravel
+        return Inertia::render("ticketmain", ["tickets" => $tickets, "moi" => $meinfo, "resp" => $resp, "dem" => User::find(Auth::user()->id)->isDemandeur(), "probleme" => TypeProbleme::all()]); //dire à Inertia VueJS que tickets et égale au tickets de laravel
     }
     
     public function oneticket(int $id){ //le ID pris en compte dans la route par paramètre
@@ -61,15 +63,22 @@ class TicketController extends Controller
     //MODIF D'UN TICKET
     public function updateticket(Request $request, int $id){
         $meinfo = Auth::user();
+        $dateResolved = date('Y-m-d');
         EtatTicket::find($request->etat_id);
 
         $validor = $request->validate([ //on check s'il y a des valeurs qui a été modifié ou sinon si pas de valeurs alors on ne peut pas submit (aussi, c'est de la recup des données du form du template vueJS)
-            "description" => ['required'],"commentaire" => [], "etat_id" => [], "libelle_etat" => [] //faut pas que ça soit vide
+            "description" => ['required'], "commentaire" => [], "etat_id" => [], "libelle_etat" => [], "resolu_at" => [] //faut pas que ça soit vide
         ]);
-            Ticket::FindOrFail($id)->update($validor); //on update via la variable validor qui est le request validate
-            return Inertia::Render("ticketupdate", ["tickets" => Ticket::find($id), "moi" => $meinfo]);
+        Ticket::FindOrFail($id)->update($validor); //on update via la variable validor qui est le request validate
 
+        if($request->etat_id == 2){ //si le ticket est resolu alors
+            Ticket::FindOrFail($id)->update([
+                'resolu_at' => $dateResolved    
+            ]); 
+        }
+        return Inertia::Render("ticketupdate", ["tickets" => Ticket::find($id), "moi" => $meinfo]);
     }
+
     public function displayupdate(int $id){
         $meinfo = Auth::user();
         $see = DB::table('tickets')->join('etat_tickets', 'etat_id', '=', 'etat_tickets.id')->select('tickets.*', 'etat_tickets.libelle_etat')->where('tickets.id', $id)->get();
@@ -114,7 +123,7 @@ class TicketController extends Controller
         //UPLOAD FICHIER IMAGE
         if ($request->hasFile('piecejointe')) {
             //$image_path = $request->file('piecejointe')->store('img', 'public');
-            $name = rand(0,100) . '-' . $request->piecejointe->getClientOriginalName();
+            $name = md5($request->piecejointe->getClientOriginalName()).substr(0,10) . '-' . $request->piecejointe->getClientOriginalName();
             $image_path = $request->file('piecejointe')->move(public_path('img/upload'),$name);
         } else {
             $name = null;

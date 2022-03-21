@@ -6,13 +6,13 @@
     </section>
     <form @submit.prevent="form.post($route('login'))">
       <div>       
-        <label for="email">E-mail : </label>
+        <label id="inputemail" for="email">E-mail : </label>
         <input id="email" type="email" v-model="form.email" placeholder="Email" />
           <b v-if="form.errors.email" class="text-danger">
             {{ form.errors.email }}</b>
       </div>
       <div>
-        <label for="password">Password : </label>
+        <label id="inputpass" for="password">Mot de passe : </label>
         <input id="password" type="password" v-model="form.password" placeholder="Mot de passe"/>
           <b v-if="form.errors.password" class="text-danger"> {{ form.errors.password }}</b>
       </div>

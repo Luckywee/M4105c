@@ -2,7 +2,7 @@
   <div>
     <Header :title="title" :moi="moi"/>
   <div>
-    <TableOpe :tickets="tickets" :roledem="dem" :roleresp="resp"/> <!-- pour passer une donnée à un component-->
+    <TableOpe :tickets="tickets" :roledem="dem" :roleresp="resp" :typeprobleme="probleme"/> <!-- pour passer une donnée à un component-->
   </div>
   </div>
 </template> 
@@ -25,6 +25,9 @@ export default {
         },
         resp: {
             type: Boolean
+        },
+        probleme: {
+            type: Array
         }
     },
     data(){

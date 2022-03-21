@@ -16,6 +16,6 @@ class Ticket extends Model
     }
 
     protected $fillable = [
-        'description', 'commentaire','etat_id','libelle_etat','piecejointe','type_probleme_id','droituser_id','operateur_id','datecreation'
+        'description', 'commentaire','etat_id','libelle_etat','piecejointe','type_probleme_id','droituser_id','operateur_id','datecreation','resolu_at'
     ];
 }

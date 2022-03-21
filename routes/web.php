@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AffecterTicketController;
+use App\Http\Controllers\FiltresTicketController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\StatsController;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,11 @@ Route::middleware("auth")->group(function(){
     //INSERER TICKET
     Route::get("ticketinset",[TicketController::class,"displayinsert"])->name("ticketenvoye.view");  
     Route::post("ticketinset",[TicketController::class,"insererticket"])->name("insererticket");
+
+    //filtrer type probleme laravel 
+    Route::get("filtrerprobleme",[FiltresTicketController::class,"filtrertype"])->name("filtrertype"); 
+    Route::post("ticketmain",[FiltresTicketController::class,"filtrertype"])->name("filtrertype");   //on post la page de base pour filtrer
+
     //formulaire pour la création d'un nouveau ticket
     Route::get("ticketform",[TicketController::class,"displaymakenewticket"])->name("displaymakenewticket");
 

@@ -9,7 +9,7 @@
                 </select>
                 <br>
                 <label for="description">La description de votre problème ?</label>
-                <textarea v-model="form.description" name="description"></textarea>
+                <textarea v-model="form.description" maxlength = "250" name="description"></textarea>
             </section>
             <section>
                 <label for="uploadfile">Mettre en ligne des pièces-jointes</label>
@@ -35,7 +35,7 @@ export default {
     data() {
         return {
             title: "Formulaire de ticket",
-             form: this.$inertia.form({
+             form: this.$inertia.form({ //recup du formulaire avec v-model="form..."
                  description: "", //quand la page s'affiche en post, on aura des nouvelle données. Genre description.setText("") comme en Java pour faire un champs vide
                  type_probleme_id: this.tickets.type_probleme_id,
                  '_method': 'POST',

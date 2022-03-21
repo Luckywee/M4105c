@@ -188,48 +188,53 @@ class DatabaseSeeder extends Seeder
         DB::table('droit_users')->insert($droitusers);
 
         //TABLE INSERT UN TICKET EXEMPLE
-        $date = date('Y-m-d');
+        $dateCreated = date('Y-m-d',strtotime("2/2/22"));
+        $dateResolved = date('Y-m-d');
         //DB::table('tickets')->delete();
         $ticketinsert = [
             [
-                "datecreation" => $date,
+                "datecreation" => $dateCreated,
                 "type_probleme_id" => "3",
                 'droituser_id' => "2",
                 "description" => "Jordan a bloqué l'accès à mon drive oof",
                 "operateur_id" => "4",
                 //'responsable_id'
                 //'piecejointe'
-                "etat_id" => "1",
+                "etat_id" => "2",
+                "resolu_at" => $dateResolved,
             ],
             [
-                "datecreation" => $date,
+                "datecreation" => $dateCreated,
                 "type_probleme_id" => "1",
                 'droituser_id' => "2",
                 "description" => "William a piraté mes bitcoins :(((((((",
                 "operateur_id" => "2",
                 //'responsable_id'
                 //'piecejointe' 
-                "etat_id" => "1"
+                "etat_id" => "1",
+                "resolu_at" => null,
             ],
             [
-                "datecreation" => $date,
+                "datecreation" => $dateCreated,
                 "type_probleme_id" => "2",
                 'droituser_id' => "3",
                 "description" => "MON PC A CRASH MDR",
                 "operateur_id" => "4",
                 //'responsable_id'
-                //'piecejointe' 
-                "etat_id" => "1"
+                //'piecejointe'
+                "etat_id" => "1",
+                "resolu_at" => null,
             ],
             [
-                "datecreation" => $date,
+                "datecreation" => $dateCreated,
                 "type_probleme_id" => "1",
                 'droituser_id' => "2",
                 "description" => "Jordan a installé un aimbot ",
                 "operateur_id" => "2",
                 //'responsable_id'
                 //'piecejointe' 
-                "etat_id" => "1"
+                "etat_id" => "2",
+                "resolu_at" => $dateResolved,
             ]
         ];
 

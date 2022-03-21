@@ -11,4 +11,9 @@ class EtatTicket extends Model
     protected $fillable = [
         'id','libelle_etat', 
     ];
+
+    public function isNotResolu()
+    {
+        return $this->where('id', '=', 1);
+    }
 }

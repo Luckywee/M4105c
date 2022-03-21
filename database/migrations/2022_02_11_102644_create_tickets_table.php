@@ -24,9 +24,10 @@ class CreateTicketsTable extends Migration
             $table->integer('operateur_id')->nullable();
             $table->foreign('operateur_id')->references('id')->on('droit_users');
             $table->integer('etat_id');
-            $table->foreign('etat_id')->references('id')->on('etat_tickets');            
+            $table->foreign('etat_id')->references('id')->on('etat_tickets');
             $table->string('piecejointe')->nullable();
-            $table->string('commentaire')->nullable();          
+            $table->string('commentaire')->nullable();
+            $table->date('resolu_at')->nullable();
             $table->timestamps();
         });
     }
