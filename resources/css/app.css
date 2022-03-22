@@ -131,4 +131,7 @@ a{
     #logout{
         top: 60px;
     }
+    table{
+        font-size: 0.7em;
+    }
 }

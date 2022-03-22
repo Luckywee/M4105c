@@ -1,7 +1,7 @@
 <template>
   <section class="ticketzone">
     <form  @submit.prevent="form.post($route('affectationnow', { id }))">
-      <p>TICKET NO# {{ id }}</p>
+      <p>Affecter le ticket numéro {{ id }}</p>
     <table>
       <tr>
         <th>ID Opérateur</th>
@@ -31,6 +31,7 @@ data() {
           checkd: null
         }),
         id: this.ticket.id,
+        compete: this.ticket.lastname
         }
   },
   props: {

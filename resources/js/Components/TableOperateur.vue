@@ -31,10 +31,11 @@
             {{ demandor.libelle }}
           </option>
         </select>
+        <button @click="refresh">Reset les filtres</button>
       </section>
       <table>
         <tr>
-          <th>ID</th>
+          <th>Numéro ID</th>
           <th>Date création</th>
           <th>Demandeur</th>
           <th>Type problème</th>
@@ -159,6 +160,9 @@ export default {
     ticketMouseOut() {
       this.overTicket = null;
     },
+    refresh(e){
+      window.location.reload()
+    }
   },
   mounted() {
     let noticket = document.querySelector(".noticket");

@@ -69,6 +69,7 @@ Route::middleware("auth")->group(function(){
     Route::post("affecterticket/{id}",[AffecterTicketController::class,"affectationnow"])->name("affectationnow");
 
     Route::get('/stat', [StatsController::class, 'printStats'])->name('stat.view');
+
     //});
     
 });
