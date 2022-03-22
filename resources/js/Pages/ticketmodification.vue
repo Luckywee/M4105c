@@ -29,17 +29,18 @@
                     </select>
                     <br>
                     <label id="commentaire" for="commentaire">Commentaire du opérateur</label>
-                    <textarea name="commentaire" placeholder="Ecrivez votre avis à propos de ce problème." v-model="form.commentaire">{{ yourmom.commentaire }}</textarea>
+                    <textarea v-if="roz || rop" name="commentaire" placeholder="Ecrivez votre avis à propos de ce problème." v-model="form.commentaire">{{ yourmom.commentaire }}</textarea>
+                    <textarea v-else name="commentaire" placeholder="" disabled v-model="form.commentaire">{{ yourmom.commentaire }}</textarea>                    
                 </section>
                 </div>
                 <br>
               <figure v-if="roz === true || rop === true"> <!-- ou sinon v-if="roz || rop" -->
                     <input type="submit" id="maj" class="coolbutton" value="Mettre à jour"/>
                     <Link id="affecter" class="coolbutton" :href="$route('affecterticket', {id : yourmom.id})">Affecter ce ticket</Link>
-                    <a id="retour" class="coolbutton" href="/ticketmain">Retour mdr</a>
+                    <a id="retour" class="coolbutton" href="/ticketmain">Retour</a>
               </figure>
                 <figure v-else>
-                    <a id="retour" class="coolbutton" href="/ticketmain">Retour mdr</a>
+                    <a id="retour" class="coolbutton" href="/ticketmain">Retour</a>
               </figure>
 
           </form>
@@ -119,7 +120,7 @@ export default {
                 })
             }
 
-        }
+        },
     },
     mounted() {
         let opts = document.querySelectorAll('option');

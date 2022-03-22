@@ -5,17 +5,23 @@
                 <p>La date à laquel votre ticket va être envoyé <b id="timenow"></b></p>
                 <label for="typeasaisir">Quel est votre type de problème ?</label>
                 <select v-model="form.type_probleme_id" name="typeasaisir">
-                    <option id="problemeselect" v-for="listederoul in listeprobleme" :key="listederoul.id" :value="listederoul.id">{{ listederoul.libelle}}</option>
+                    <option id="problemeselect" v-for="listederoul in listeprobleme" :key="listederoul.id" :value="listederoul.id">{{listederoul.libelle}}</option>
                 </select>
+                <b v-if="form.errors.type_probleme_id" class="text-danger">Un type problème est requis.</b> <!-- v-if avec message de base dom-->
                 <br>
-                <label for="description">La description de votre problème ?</label>
-                <textarea v-model="form.description" maxlength = "250" name="description"></textarea>
+                <article>
+                    <label for="description">La description de votre problème ?</label>
+                    <textarea v-model="form.description" maxlength = "250" name="description"></textarea>
+                    <p id="textlen" :class="form.description.length == 250 ? 'max' : ''">{{form.description.length}}/250</p>
+                    <b v-if="form.errors.description" class="text-danger">Une description est requise.</b>
+                </article>
             </section>
             <section>
                 <label for="uploadfile">Mettre en ligne des pièces-jointes</label>
                 <input type="file" name="uploadfile" id="uploader" ref="photo" @input="form.piecejointe = $event.target.files[0]"/>
             </section>
             <input type="submit" id="inserer" class="coolbutton" value="INSERER TICKET"/>
+            <a id="retour" class="coolbutton xl" href="/ticketmain">Retour vers la liste des tickets</a>
         </form>
     </div>
 </template>
@@ -76,5 +82,26 @@ form section{
     position: relative;
     text-align: center;
     margin-top: 50px;
+}
+#textlen{
+    position: absolute;
+    right: 0;
+    float: right;
+    display: block;
+    width: 42%;
+    font-size: 1.5em;
+    transform: scale(1);
+    transition: transform 0.5s ease;
+}
+#textlen.max{
+    color: red;
+    animation: descriptionmax infinite 0.5s ease alternate-reverse;
+}
+.xl{
+    width: 20%;
+}
+@keyframes descriptionmax{
+    From {transform: scale(0.75);}
+    to {transform: scale(1);}
 }
 </style>

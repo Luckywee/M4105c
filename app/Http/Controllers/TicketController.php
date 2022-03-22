@@ -108,7 +108,7 @@ class TicketController extends Controller
     public function insererticket(Request $request){
         //CHECK DANS FORM
         $request->validate([
-            "description" => ['required'], "type_probleme_id" => ['required'], "piecejointe" => []
+            "description" => ['required'], "type_probleme_id" => ['required'], "piecejointe" => ['max:4096']
         ]);
         
         //VARIABLES
